@@ -95,10 +95,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (e instanceof ApiError) {
         // incluye el caso de allowlist (403): "Tu cuenta no está habilitada para usar esta app"
         setError(e.message);
+        // Si no cerramos la sesión nativa acá, Google Play Services recuerda esta
+        // cuenta como "la actual" y el próximo signIn() la reutiliza en silencio
+        // en vez de mostrar el picker de cuentas de nuevo.
+        await GoogleSignin.signOut().catch(() => {});
       } else if (isErrorWithCode(e) && e.code === statusCodes.SIGN_IN_CANCELLED) {
         // cancelado por el usuario, no es un error a mostrar
       } else {
         setError('No se pudo iniciar sesión con Google');
+        await GoogleSignin.signOut().catch(() => {});
       }
     } finally {
       setBusy(false);
