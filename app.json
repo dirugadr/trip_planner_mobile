@@ -29,9 +29,15 @@
       [
         "@react-native-google-signin/google-signin",
         {
-          "iosUrlScheme": "com.googleusercontent.apps.REPLACE_WITH_IOS_CLIENT_ID"
+          "iosUrlScheme": "com.googleusercontent.apps.746119306656-pf9l46n3ab6ecqg6s94n1j3mijm5uagc"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b818d41b-2375-467f-8b1c-9c9cfc463b29"
+      }
+    },
+    "owner": "dirugadr"
   }
 }

@@ -50,19 +50,28 @@ acceder a mis viajes desde el celular.
 
 ---
 
-## Pendiente (manual, fuera del alcance de este cambio)
+## Pendiente
 
-Estos pasos requieren credenciales/cuentas del usuario (Google Cloud Console,
-cuenta de Expo) y un dispositivo físico, así que no se pudieron completar de
-forma autónoma. Quedan documentados en el [README](../README.md):
+Verificado en emulador Android (2026-09-18):
 
-- [ ] Crear los Client IDs de Android e iOS en Google Cloud Console (mismo
-      proyecto que ya usa el backend) y completar `.env` /
-      `iosUrlScheme` en `app.json` con los valores reales.
-- [ ] `eas login` + `eas init` para vincular el proyecto a una cuenta de Expo.
-- [ ] Generar y correr el development build en un dispositivo Android e iOS
-      físico (o emulador/simulador de ambos).
-- [ ] Probar el login con un correo en la allowlist (debe entrar) y uno que no
-      (debe mostrar el mensaje de acceso denegado, sin JWT guardado).
-- [ ] Verificar que cerrar y volver a abrir la app mantiene la sesión sin pedir
-      login de nuevo, y que cerrar sesión borra el JWT del secure store.
+- [x] Client IDs creados en Google Cloud Console: Web (reusado del backend),
+      dos de Android (uno con el SHA-1 del keystore de EAS y otro con el del
+      keystore de debug local en `android/app/debug.keystore`, ambos con
+      package name `com.dirugadr.tripplanner`), y uno de iOS. `.env` y el
+      `iosUrlScheme` de `app.json` completados con los valores reales.
+- [x] `eas login` + `eas init` hecho, proyecto vinculado.
+- [x] Development build generado localmente (`npx expo run:android`) e
+      instalado en un emulador Android.
+- [x] Login con un correo de la allowlist: funciona de punta a punta (Google
+      → backend → JWT en secure store → pantalla Home).
+
+Falta (manual, requiere dispositivo/cuenta):
+
+- [ ] Probar login con un correo que **no** está en la allowlist (debe
+      mostrar el mensaje de acceso denegado, sin JWT guardado).
+- [ ] Verificar que cerrar y volver a abrir la app mantiene la sesión sin
+      pedir login de nuevo.
+- [ ] Verificar que cerrar sesión borra el JWT del secure store y vuelve al
+      login.
+- [ ] Repetir la verificación en iOS (requiere macOS/Xcode o un build EAS de
+      iOS en dispositivo físico — no probado todavía).
