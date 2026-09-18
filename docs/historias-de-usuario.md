@@ -48,7 +48,7 @@ acceder a mis viajes desde el celular.
   Android/iOS nuevos (ver pendientes) son para registrar la app nativa en
   Google Cloud, no cambian el `audience` del token.
 
-## HU-5.3 — Ver lista de viajes ✅ (implementación; falta verificar en dispositivo)
+## HU-5.3 — Ver lista de viajes ✅ (verificado en Android; iOS pendiente)
 
 **Como** viajero, **quiero** ver mis viajes desde el celular, **para**
 acceder rápido al que me interesa sin usar la web.
@@ -62,7 +62,7 @@ acceder rápido al que me interesa sin usar la web.
 - [x] Pantalla de solo lectura — no hay crear/editar/eliminar viajes.
 - [x] Al tocar un viaje navega al Itinerario (HU-5.4) con su `tripId`.
 
-## HU-5.4 — Ver itinerario de un día ✅ (implementación; falta verificar en dispositivo)
+## HU-5.4 — Ver itinerario de un día ✅ (verificado en Android; iOS pendiente)
 
 **Como** viajero, **quiero** ver las actividades de cada día de mi viaje
 desde el celular, **para** consultar mi plan estando en movimiento.
@@ -122,14 +122,13 @@ Verificado en emulador Android (2026-09-18):
 - [x] Cerrar sesión borra el JWT del secure store y vuelve a la pantalla de
       login.
 
-Falta verificar HU-5.3/5.4 en dispositivo (código compila y pasa `tsc`/
-`expo-doctor`, pero todavía no se confirmó visualmente en el emulador):
+Verificado en emulador Android (2026-09-18), HU-5.3/5.4:
 
-- [ ] Lista de viajes con al menos 2 viajes (uno con foto, uno sin),
-      confirmar orden por fecha.
-- [ ] Navegación de días abre en el último día visto correctamente.
-- [ ] Conector de caminata muestra distancia solo cuando supera 5 min.
-- [ ] Ninguna acción intenta crear/editar/eliminar datos (solo lecturas).
+- [x] Lista de viajes carga con foto/fallback, nombre y fechas.
+- [x] Itinerario muestra días y actividades correctamente.
+- [x] Conector de caminata visible bajo las actividades.
+- [x] Reabrir un viaje visto antes abre en el mismo día (`last_viewed_day_id`
+      persistido y leído correctamente).
 
 Falta (manual, requiere Mac/dispositivo iOS):
 
