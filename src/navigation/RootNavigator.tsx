@@ -4,11 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../auth/AuthContext';
 import { LoginScreen } from '../screens/LoginScreen';
-import { HomeScreen } from '../screens/HomeScreen';
+import { TripsListScreen } from '../screens/TripsListScreen';
+import { ItineraryScreen } from '../screens/ItineraryScreen';
+import { colors } from '../theme/colors';
+import { fonts } from '../theme/typography';
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Login: undefined;
-  Home: undefined;
+  Trips: undefined;
+  Itinerary: { tripId: string; tripName?: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -26,11 +30,24 @@ export function RootNavigator() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: { backgroundColor: colors.surface },
+          headerTitleStyle: { fontFamily: fonts.semiBold, color: colors.onSurface },
+          headerShadowVisible: false,
+        }}
+      >
         {status === 'authenticated' ? (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <>
+            <Stack.Screen name="Trips" component={TripsListScreen} options={{ title: 'Tus viajes' }} />
+            <Stack.Screen
+              name="Itinerary"
+              component={ItineraryScreen}
+              options={({ route }) => ({ title: route.params.tripName ?? 'Itinerario' })}
+            />
+          </>
         ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

@@ -48,6 +48,52 @@ acceder a mis viajes desde el celular.
   Android/iOS nuevos (ver pendientes) son para registrar la app nativa en
   Google Cloud, no cambian el `audience` del token.
 
+## HU-5.3 — Ver lista de viajes ✅ (implementación; falta verificar en dispositivo)
+
+**Como** viajero, **quiero** ver mis viajes desde el celular, **para**
+acceder rápido al que me interesa sin usar la web.
+
+**Criterios de aceptación:**
+- [x] Lista los viajes del usuario autenticado (`GET /api/trips`, ya viene
+      ordenado por `start_date ASC` desde el backend — no se ordena en el
+      cliente).
+- [x] Muestra por viaje: foto (`cover_photo_url`, derivada del mecanismo de
+      foto de POI existente) o ícono de fallback, nombre, y rango de fechas.
+- [x] Pantalla de solo lectura — no hay crear/editar/eliminar viajes.
+- [x] Al tocar un viaje navega al Itinerario (HU-5.4) con su `tripId`.
+
+## HU-5.4 — Ver itinerario de un día ✅ (implementación; falta verificar en dispositivo)
+
+**Como** viajero, **quiero** ver las actividades de cada día de mi viaje
+desde el celular, **para** consultar mi plan estando en movimiento.
+
+**Criterios de aceptación:**
+- [x] Tabs horizontales de días; abre por defecto en `last_viewed_day_id` si
+      existe y pertenece al viaje, si no en el primer día.
+- [x] Lista de actividades del día ordenada por horario (ya viene ordenada
+      así desde `GET /api/trips/:id`), con horario, categoría (a partir del
+      primer POI asociado), estado (`tentative` → "Tentativa"/"Confirmada"),
+      candado si `is_fixed`, hora de fin calculada desde `duration_minutes`,
+      ubicación y foto del POI si tiene.
+- [x] Conector de caminata entre actividades consecutivas. **Nota de
+      diseño**: el backend no expone minutos/km precalculados, solo
+      geometría cruda (`GET /api/days/:dayId/route-view`) — se portó la
+      misma lógica que usa la web (`frontend/src/utils/geo.js`: haversine +
+      80 m/min) a `src/utils/geo.ts`, incluyendo el umbral ">5 min" para
+      mostrar la distancia en km.
+- [x] Pantalla de solo lectura; el mapa del día queda fuera de alcance
+      (según el spec, para una iteración posterior).
+- [x] Tocar un día distinto persiste el cambio (`PUT
+      /api/trips/:tripId/last-viewed-day`, best-effort, no bloquea la UI) —
+      decisión tomada para mantener paridad con la web.
+
+**Notas de diseño:**
+- Tipografía Plus Jakarta Sans vía `@expo-google-fonts/plus-jakarta-sans` +
+  `expo-font`; íconos con `lucide-react-native` (+ `react-native-svg`,
+  nativo — requirió rebuild del development build).
+- Colores portados 1:1 de `frontend/tailwind.config.js` a
+  `src/theme/colors.ts`.
+
 ---
 
 ## Pendiente
@@ -75,6 +121,15 @@ Verificado en emulador Android (2026-09-18):
       nuevo.
 - [x] Cerrar sesión borra el JWT del secure store y vuelve a la pantalla de
       login.
+
+Falta verificar HU-5.3/5.4 en dispositivo (código compila y pasa `tsc`/
+`expo-doctor`, pero todavía no se confirmó visualmente en el emulador):
+
+- [ ] Lista de viajes con al menos 2 viajes (uno con foto, uno sin),
+      confirmar orden por fecha.
+- [ ] Navegación de días abre en el último día visto correctamente.
+- [ ] Conector de caminata muestra distancia solo cuando supera 5 min.
+- [ ] Ninguna acción intenta crear/editar/eliminar datos (solo lecturas).
 
 Falta (manual, requiere Mac/dispositivo iOS):
 
