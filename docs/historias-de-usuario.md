@@ -21,7 +21,7 @@ funcionando, **para** empezar a construir pantallas sobre una base sólida.
       producción y documentación para apuntar a un backend local.
 - [x] `docs/historias-de-usuario.md` (este archivo) creado en el repo.
 
-## HU-5.2 — Login con Google ✅ (implementación)
+## HU-5.2 — Login con Google ✅ (verificado en Android; iOS pendiente)
 
 **Como** viajero, **quiero** iniciar sesión con mi cuenta de Google, **para**
 acceder a mis viajes desde el celular.
@@ -64,14 +64,19 @@ Verificado en emulador Android (2026-09-18):
       instalado en un emulador Android.
 - [x] Login con un correo de la allowlist: funciona de punta a punta (Google
       → backend → JWT en secure store → pantalla Home).
-
-Falta (manual, requiere dispositivo/cuenta):
-
-- [ ] Probar login con un correo que **no** está en la allowlist (debe
-      mostrar el mensaje de acceso denegado, sin JWT guardado).
-- [ ] Verificar que cerrar y volver a abrir la app mantiene la sesión sin
-      pedir login de nuevo.
-- [ ] Verificar que cerrar sesión borra el JWT del secure store y vuelve al
+- [x] Login con un correo que **no** está en la allowlist: el backend
+      responde `403` y la pantalla de login muestra "Tu cuenta no está
+      habilitada para usar esta app" tal cual la devuelve la API, sin
+      guardar JWT. (Encontramos y arreglamos un bug en el camino: si no
+      cerrábamos la sesión nativa de Google tras un rechazo, Play Services
+      reutilizaba esa cuenta en silencio en el siguiente intento en vez de
+      mostrar el picker — ver `src/auth/AuthContext.tsx`.)
+- [x] Cerrar y volver a abrir la app mantiene la sesión sin pedir login de
+      nuevo.
+- [x] Cerrar sesión borra el JWT del secure store y vuelve a la pantalla de
       login.
-- [ ] Repetir la verificación en iOS (requiere macOS/Xcode o un build EAS de
-      iOS en dispositivo físico — no probado todavía).
+
+Falta (manual, requiere Mac/dispositivo iOS):
+
+- [ ] Repetir toda la verificación en iOS (requiere macOS/Xcode o un build
+      EAS de iOS en dispositivo físico — no probado todavía).
